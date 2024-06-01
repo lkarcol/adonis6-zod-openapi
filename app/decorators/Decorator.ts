@@ -70,3 +70,23 @@ export function Decorator(type: HttpMethods, pattern: string, responseSchema: z.
     }
   }
 }
+
+export function POST(pattern: string, responseSchema: z.ZodType): any {
+  return Decorator('POST', pattern, responseSchema)
+}
+
+export function GET(pattern: string, responseSchema: z.ZodType): any {
+  return Decorator('GET', pattern, responseSchema)
+}
+
+export function PATCH(pattern: string, responseSchema: z.ZodType): any {
+  return Decorator('PATCH', pattern, responseSchema)
+}
+
+export function PUT(pattern: string, responseSchema: z.ZodType): any {
+  return Decorator('PATCH', pattern, responseSchema)
+}
+
+export function DELETE(pattern: string, responseSchema: z.ZodType): any {
+  return Decorator('DELETE', pattern, responseSchema)
+}

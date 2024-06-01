@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-function DecorateMethod(type: 'params' | 'body' | 'query', schema: z.ZodType) {
-  return function decorate(target: any, key: string, index: number) {
+function DecorateMethodParam(type: 'params' | 'body' | 'query', schema: z.ZodType) {
+  return function decorateMethodParameter(target: any, key: string, index: number) {
     Reflect.defineMetadata(
       type,
       {
@@ -15,13 +15,13 @@ function DecorateMethod(type: 'params' | 'body' | 'query', schema: z.ZodType) {
 }
 
 export function Params(schema: z.ZodType): any {
-  return DecorateMethod('params', schema)
+  return DecorateMethodParam('params', schema)
 }
 
 export function Body(schema: z.ZodType): any {
-  return DecorateMethod('body', schema)
+  return DecorateMethodParam('body', schema)
 }
 
 export function Query(schema: z.ZodType): any {
-  return DecorateMethod('query', schema)
+  return DecorateMethodParam('query', schema)
 }

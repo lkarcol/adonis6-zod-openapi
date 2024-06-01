@@ -1,9 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { z } from 'zod'
-import { GET } from '../decorators/Get.js'
 import User from '#models/user'
 import { Body, Params, Query } from '../decorators/Params.js'
-import { POST } from '../decorators/Post.js'
+import { GET, POST } from '../decorators/Decorator.js'
 
 export const PostModel = z
   .object({
