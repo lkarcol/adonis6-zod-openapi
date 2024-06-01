@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-export function Params(schema: z.ZodType): any {
+function DecorateMethod(type: 'params' | 'body' | 'query', schema: z.ZodType) {
   return function decorate(target: any, key: string, index: number) {
     Reflect.defineMetadata(
-      'params',
+      type,
       {
         index,
         schema,
@@ -12,32 +12,16 @@ export function Params(schema: z.ZodType): any {
       key
     )
   }
+}
+
+export function Params(schema: z.ZodType): any {
+  return DecorateMethod('params', schema)
 }
 
 export function Body(schema: z.ZodType): any {
-  return function decorate(target: any, key: string, index: number) {
-    Reflect.defineMetadata(
-      'body',
-      {
-        index,
-        schema,
-      },
-      target,
-      key
-    )
-  }
+  return DecorateMethod('body', schema)
 }
 
 export function Query(schema: z.ZodType): any {
-  return function decorate(target: any, key: string, index: number) {
-    Reflect.defineMetadata(
-      'query',
-      {
-        index,
-        schema,
-      },
-      target,
-      key
-    )
-  }
+  return DecorateMethod('query', schema)
 }

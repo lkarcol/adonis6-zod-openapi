@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { registry } from '../../provider/OpenApi.js'
-import { validateRequest, validateResponse } from '../../provider/validator.js'
 import { HttpContext } from '@adonisjs/core/http'
+import { validateSchema } from '../../provider/validator.js'
 
 type HttpMethods = 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT'
 
@@ -54,19 +54,19 @@ export function Decorator(type: HttpMethods, pattern: string, responseSchema: z.
       const { request } = args[0] as HttpContext
 
       if (paramsMetadata) {
-        args[paramsMetadata.index] = await validateRequest(paramsMetadata.schema, request.params())
+        args[paramsMetadata.index] = await validateSchema(paramsMetadata.schema, request.params())
       }
 
       if (queryMetadata) {
-        args[queryMetadata.index] = await validateRequest(queryMetadata.schema, request.qs())
+        args[queryMetadata.index] = await validateSchema(queryMetadata.schema, request.qs())
       }
 
       if (bodyMetadata) {
-        args[bodyMetadata.index] = await validateRequest(bodyMetadata.schema, request.body())
+        args[bodyMetadata.index] = await validateSchema(bodyMetadata.schema, request.body())
       }
 
       const result = await original(...args)
-      return validateResponse(responseSchema, result)
+      return validateSchema(responseSchema, result)
     }
   }
 }

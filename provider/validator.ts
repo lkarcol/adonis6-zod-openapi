@@ -1,6 +1,6 @@
 import { z, ZodIssue, ZodType, ZodRawShape } from 'zod'
 
-export async function validateRequest<T extends ZodRawShape>(schema: z.ZodType<T>, request: any) {
+export async function validateSchema<T extends ZodRawShape>(schema: z.ZodType<T>, request: any) {
   try {
     return (await schema.parseAsync(request)) as z.infer<typeof schema>
   } catch (e) {
@@ -8,13 +8,6 @@ export async function validateRequest<T extends ZodRawShape>(schema: z.ZodType<T
   }
 }
 
-export async function validateResponse<T>(schema: ZodType<T>, request: object) {
-  try {
-    return (await schema.parseAsync(request)) as z.infer<typeof schema>
-  } catch (e) {
-    throw new ValidationError(e.errors.map(formatZodError))
-  }
-}
 export function formatZodError(e: ZodIssue) {
   return {
     field: e.path.join('.'),
