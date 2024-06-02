@@ -18,7 +18,7 @@ export function Decorator(type: HttpMethods, pattern: string, responseSchema: z.
       request: {
         ...(paramsMetadata?.schema && { params: paramsMetadata.schema }),
         ...(queryMetadata?.schema && { query: queryMetadata.schema }),
-        ...(bodyMetadata?.schema && { query: bodyMetadata.schema }),
+        ...(bodyMetadata?.schema && { body: bodyMetadata.schema }),
       },
       responses: {
         200: {
@@ -84,7 +84,7 @@ export function PATCH(pattern: string, responseSchema: z.ZodType): any {
 }
 
 export function PUT(pattern: string, responseSchema: z.ZodType): any {
-  return Decorator('PATCH', pattern, responseSchema)
+  return Decorator('PUT', pattern, responseSchema)
 }
 
 export function DELETE(pattern: string, responseSchema: z.ZodType): any {
