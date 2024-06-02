@@ -38,7 +38,7 @@ export const UsersReponse = UserModel.array()
 export default class UsersController {
   @GET('/users', UsersReponse)
   async index({ request }: HttpContext) {
-    return User.query().preload('posts')
+    return User.query()
   }
 
   @GET('/users/:id', UserModel)

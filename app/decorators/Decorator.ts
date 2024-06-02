@@ -10,7 +10,7 @@ export function Decorator(type: HttpMethods, pattern: string, responseSchema: z.
     const paramsMetadata = Reflect.getMetadata(`params`, target, key)
     const queryMetadata = Reflect.getMetadata(`query`, target, key)
     const bodyMetadata = Reflect.getMetadata(`body`, target, key)
-
+    console.log(bodyMetadata?.schema)
     // Register path for OPEN API generation
     registry.registerPath({
       method: type.toLowerCase() as any,
@@ -18,7 +18,15 @@ export function Decorator(type: HttpMethods, pattern: string, responseSchema: z.
       request: {
         ...(paramsMetadata?.schema && { params: paramsMetadata.schema }),
         ...(queryMetadata?.schema && { query: queryMetadata.schema }),
-        ...(bodyMetadata?.schema && { body: bodyMetadata.schema }),
+        ...(bodyMetadata?.schema && {
+          body: {
+            content: {
+              'application/json': {
+                schema: bodyMetadata?.schema,
+              },
+            },
+          },
+        }),
       },
       responses: {
         200: {
