@@ -1,8 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { z } from 'zod'
 import User from '#models/user'
-import { Body, Params, Query } from '../decorators/Params.js'
-import { GET, POST } from '../decorators/Decorator.js'
+import { GET, POST } from '../../provider/decorators/MethodDecorator.js'
+import { Body, Params, Query } from '../../provider/decorators/ParamsDecorator.js'
+import { Resource } from '../../provider/decorators/ClassDecorator.js'
 
 export const PostModel = z
   .object({
@@ -35,13 +36,14 @@ export const UserInput = z.object({
 
 export const UsersReponse = UserModel.array()
 
+@Resource('/users')
 export default class UsersController {
-  @GET('/users', UsersReponse)
+  @GET('/', UsersReponse)
   async index({ request }: HttpContext) {
     return User.query()
   }
 
-  @GET('/users/:id', UserModel)
+  @GET('/:id', UserModel)
   async user(
     @Query(UserQvery) kvery: z.infer<typeof UserParam>,
     @Params(UserParam) params: z.infer<typeof UserParam>
@@ -50,7 +52,7 @@ export default class UsersController {
     return user
   }
 
-  @POST('/users/', UserModel)
+  @POST('/', UserModel)
   async creatUser(@Body(UserInput) payload: z.infer<typeof UserInput>) {
     const user = await User.create(payload)
     return user

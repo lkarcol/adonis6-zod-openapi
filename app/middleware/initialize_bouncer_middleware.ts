@@ -15,16 +15,18 @@ export default class InitializeBouncerMiddleware {
      * Create bouncer instance for the ongoing HTTP request.
      * We will pull the user from the HTTP context.
      */
-    await ctx.auth.use('web').check()
-    const user = ctx.auth.use('web').user
-
     ctx.bouncer = new Bouncer(
-      () => {
-        return user || null
-      },
+      () => ctx.auth.user || null,
       abilities,
       policies
     ).setContainerResolver(ctx.containerResolver)
+
+    /**
+     * Share bouncer helpers with Edge templates.
+     */
+    if ('view' in ctx) {
+      ctx.view.share(ctx.bouncer.edgeHelpers)
+    }
 
     return next()
   }

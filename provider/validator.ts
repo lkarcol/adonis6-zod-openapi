@@ -4,6 +4,7 @@ export async function validateSchema<T extends ZodRawShape>(schema: z.ZodType<T>
   try {
     return (await schema.parseAsync(request)) as z.infer<typeof schema>
   } catch (e) {
+    console.log(e.errors.map(formatZodError))
     throw new ValidationError(e.errors.map(formatZodError))
   }
 }
